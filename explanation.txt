@@ -1,0 +1,85 @@
+This section imports the necessary dependencies for the application:
+
+asynccontextmanager from contextlib: a decorator used to define a factory function for asynchronous context managers.
+FastAPI from fastapi: the main class for creating a FastAPI application instance.
+CORSMiddleware from fastapi.middleware.cors: a middleware class for handling Cross-Origin Resource Sharing (CORS) requests.
+uvicorn: an ASGI web server implementation for Python.
+SERVER_URL, PORT, and ENV from constants: these are likely configuration variables stored in a separate constants module.
+
+
+
+Defining the Lifespan Context Manager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yield
+This section defines a custom lifespan context manager using the asynccontextmanager decorator. 
+The lifespan function takes a FastAPI application instance as an argument and yields control to the caller.
+
+In the context of FastAPI, a lifespan context manager is used to manage the application's startup and shutdown events. 
+The lifespan function is called when the application starts, and it yields control to the caller. When the application shuts down, 
+the lifespan function resumes execution after the yield statement.
+
+In this specific implementation, 
+the lifespan function does not perform any specific actions during startup or shutdown. 
+The yield statement simply passes control to the caller, allowing the application to run.
+
+
+
+
+
+
+
+
+CORS or "Cross-Origin Resource Sharing" refers to the situations when a frontend running in a browser has JavaScript code that communicates with a backend, and the backend is in a different "origin" than the frontend.
+
+Origin¶
+An origin is the combination of protocol (http, https), domain (myapp.com, localhost, localhost.tiangolo.com), and port (80, 443, 8080).
+
+So, all these are different origins:
+
+http://localhost
+https://localhost
+http://localhost:8080
+Even if they are all in localhost, they use different protocols or ports, so, they are different "origins".
+
+
+
+The CORS settings are configured as follows:
+
+allow_origins=["*"]: allows requests from all origins (domains, protocols, or ports). In a production environment, you should specify a list of trusted origins instead of using the wildcard *.
+allow_credentials=True: allows the browser to send credentials (e.g., cookies, authentication tokens) with requests.
+allow_methods=["*"]: allows all HTTP methods (e.g., GET, POST, PUT, DELETE).
+allow_headers=["*"]: allows all headers in requests.
+By adding this CORS middleware, the FastAPI application will include the necessary CORS headers in its responses, allowing cross-origin requests from web browsers.
+
+
+
+
+unvicorn explanation
+
+
+
+
+Running the Application with Uvicorn
+markdown
+
+Verify
+
+Open In Editor
+Edit
+Copy code
+if __name__ == '__main__':
+    uvicorn.run("main:app", host=SERVER_URL, port=int(PORT), reload=(ENV=='dev'))
+This section sets up the application to run using the Uvicorn web server. The if __name__ == '__main__':
+ block is a common Python idiom that ensures the code within the block is only executed when the script is run directly (i.e., not when it's imported as a module by another script).
+
+The uvicorn.run() function is used to run the FastAPI application using Uvicorn. The arguments passed to uvicorn.run() are:
+
+"main:app": the module and object to run (in this case, the app object from the main module).
+host=SERVER_URL: the host to bind the server to (e.g., localhost, 0.0.0.0, etc.).
+port=int(PORT): the port to bind the server to (e.g., 8000, 5000, etc.).
+reload=(ENV=='dev'): a boolean indicating whether to enable automatic reloading of the application when the code changes. 
+In this case, reloading is enabled only when the ENV variable is set to 'dev'.
+By running the application with Uvicorn, the FastAPI application will be served at the specified host and port, and will 
+automatically reload when the code changes (if ENV is set to 'dev').
