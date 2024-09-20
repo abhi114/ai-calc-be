@@ -27,3 +27,17 @@ The code iterates over the list answers. For each answer (a dictionary), it chec
 If 'assign' is present, it sets the value of 'assign' to True.
 If 'assign' is not present, it adds the key 'assign' to the dictionary and sets it to False.
 This logic ensures that all answers have the 'assign' key, which indicates whether the answer involves assigning a value to a variable.
+
+
+A class used to handle bytes streams (essentially a buffer for binary data, like an image in this case).
+
+The APIRouter() is instantiated to define a new route for image processing. This is used instead of FastAPI() so that different routes can be modularly grouped and attached to the main FastAPI app.
+
+
+The APIRouter() is instantiated to define a new route for image processing. This is used instead of FastAPI() so that different routes can be modularly grouped and attached to the main FastAPI app.
+
+
+Decoding the Image:
+
+data.image.split(',')[1]: The incoming image is likely in the format of a base64-encoded string with a prefix (e.g., data:image/png;base64,...). The split(',')[1] extracts only the base64 part, discarding the data:image/png;base64 header.
+base64.b64decode: This function decodes the base64 string back into binary image data (i.e., the raw bytes of the image).
